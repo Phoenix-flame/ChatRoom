@@ -31,12 +31,16 @@ class ClientHandler(Thread):
                     return
  
                 if len(ready) > 0:
-                    incoming_data = self.connection.recv(1024) # TODO #2
+                    incoming_data = b''
+                    try:
+                        incoming_data = self.connection.recv(1024) # TODO #2
+                    except ConnectionResetError:
+                        logging.error("Connection Reset Error")
                     # Check if socket has been closed
                     if incoming_data == b'':
                         logging.info("Client %s left us...", str(self.addr))
-                        # for c in clients:
-                        #     print(c[0])
+                        for c in clients:
+                            print(c[0])
                         for i in range(len(clients)):
                             if clients[i][0] == self.addr:
                                 # print('Delete', clients[i][0])
@@ -45,6 +49,11 @@ class ClientHandler(Thread):
                         self.stop()
                     else:
                         logging.info("Received [%s] from Client [%s]", incoming_data.decode(), str(self.addr))
+                        if len(clients) == 1:
+                            clients[0][1].sendall(b'Nobody is in chatroom')
+                        for c in clients:
+                            if c[0] != self.addr:
+                                c[1].sendall(incoming_data)
             else:
                 print("No client is connected, SocketServer can't receive data")
                 self.stop()
