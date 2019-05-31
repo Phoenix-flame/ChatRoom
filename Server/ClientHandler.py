@@ -51,9 +51,11 @@ class ClientHandler(Thread):
                         logging.info("Received [%s] from Client [%s]", incoming_data.decode(), str(self.addr))
                         if len(clients) == 1:
                             clients[0][1].sendall(b'Nobody is in chatroom')
+                        
+                        outgoing_data = [self.addr, incoming_data]
                         for c in clients:
                             if c[0] != self.addr:
-                                c[1].sendall(incoming_data)
+                                c[1].sendall(bytes(str(outgoing_data).encode()))
             else:
                 print("No client is connected, SocketServer can't receive data")
                 self.stop()
