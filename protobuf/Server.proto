@@ -1,0 +1,8 @@
+syntax = "proto2";
+
+package Server
+
+message Client {
+	required string name;
+	required int32 port;
+}

@@ -4,7 +4,7 @@ import socket
 import threading
 from collections import deque
 import logging
-from SocketServer import *
+from SocketServer import SocketServer
 
 format = "%(asctime)s: %(message)s"
 logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
@@ -34,4 +34,6 @@ if __name__ == "__main__":
         print('\nWait...')
         server.stop()
         server.join()
+        if server.soc:
+            server.soc.close()
         print('End.')

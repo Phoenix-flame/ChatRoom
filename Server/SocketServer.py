@@ -1,7 +1,7 @@
 from threading import Thread
 import threading
 import socket
-from ClientHandler import *
+from ClientHandler import ClientHandler, clients, client_threads
 import logging
 
 format = "%(asctime)s: %(message)s"

@@ -38,11 +38,14 @@ class Client(Thread):
         if self.soc:
             self.soc.close()
             self.soc = -1
+        exit(0)
 
     def run(self):
         self.__stop = False
         while not self.__stop:
             while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+                if self.recv_thread.isStopped():
+                    self.stop()
                 line = sys.stdin.readline()
                 if line:
                     self.soc.sendall(line[:-1].encode())
@@ -80,17 +83,35 @@ class Recv(Thread):
                         logging.error("Connection Reset Error")
                     # Check if socket has been closed
                     if incoming_data == b'':
-                        logging.info("Client %s left us...", str('b'))
+                        logging.info("Server disconnected.")
                         self.stop()
                     else:
-                        logging.info("Received [%s]", incoming_data.decode())
+                        ip, port, data = self.messageCallback(incoming_data.decode())
+                        if ip != None:
+                            logging.info("From <(%s, %s)> %s!", ip, port, data)
+                        else:
+                            logging.info("From Server: %s", data)
         self.close()
  
+    def messageCallback(self, msg):
+        ret = msg.split(',')
+        if len(ret) > 1:
+            msg = msg[1:-1]
+            ret = msg.split(',')
+            ip = ret[0][2:-1]
+            port = ret[1][1:-1]
+            data = ret[2][3:-1]
+            return ip, port, data
+        else :
+            return None, None,msg
+
     def stop(self):
         self.__stop = True
  
+    def isStopped(self) -> bool:
+        return self.__stop
+    
     def close(self):
-        return
         if self.soc:
             self.soc.close()
             self.soc = -1
