@@ -119,7 +119,7 @@ if __name__ == '__main__':
     port, ip = argumentPars()
     logging.info("Client IP:[%s], Port:[%s]", ip, port)
     
-    client = MyClient(ip=ip, port=port)
+    client = Client(ip=ip, port=port)
     client.start()
     try:
         while True:
