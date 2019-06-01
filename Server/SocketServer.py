@@ -3,6 +3,7 @@ import threading
 import socket
 from ClientHandler import ClientHandler, clients, client_threads
 import logging
+from protoc import Server_pb2
 
 format = "%(asctime)s: %(message)s"
 logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
@@ -47,7 +48,14 @@ class SocketServer(Thread):
     def stop(self):
         self.__stop = True
 
+    def messageCallbackServer(self, data, ip, port):
+        message = Server_pb2.Client()
+        message.msg = data
+        message.name = ip
+        message.port = int(port)
+        return message
+
     def notify(self):
-        clients[0][1].sendall(b'New User joined the group')
+        clients[0][1].sendall(bytes(self.messageCallbackServer("New User joined the group.", "Server", 30005).SerializeToString())) 
 
 

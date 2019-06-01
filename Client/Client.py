@@ -5,6 +5,8 @@ import socket
 import logging
 import argparse as arg 
 import sys
+from protoc import Server_pb2
+from google.protobuf.message import DecodeError
 
 format = "%(asctime)s: %(message)s"
 logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
@@ -86,24 +88,20 @@ class Recv(Thread):
                         logging.info("Server disconnected.")
                         self.stop()
                     else:
-                        ip, port, data = self.messageCallback(incoming_data.decode())
-                        if ip != None:
-                            logging.info("From <(%s, %s)> %s!", ip, port, data)
-                        else:
-                            logging.info("From Server: %s", data)
+                        ip, port, msg = self.messageCallback(incoming_data)
+                        if ip == "Server":
+                            logging.info("From Server: %s", msg)
+                        else :
+                            logging.info("From <(%s, %s)> %s!", ip, port, msg)
         self.close()
  
-    def messageCallback(self, msg):
-        ret = msg.split(',')
-        if len(ret) > 1:
-            msg = msg[1:-1]
-            ret = msg.split(',')
-            ip = ret[0][2:-1]
-            port = ret[1][1:-1]
-            data = ret[2][3:-1]
-            return ip, port, data
-        else :
-            return None, None,msg
+    def messageCallback(self, data):
+        incoming_data = Server_pb2.Client()
+        try:
+            incoming_data.ParseFromString(data)
+        except DecodeError:
+            print(2)
+        return incoming_data.name, incoming_data.port, incoming_data.msg
 
     def stop(self):
         self.__stop = True
@@ -121,7 +119,7 @@ if __name__ == '__main__':
     port, ip = argumentPars()
     logging.info("Client IP:[%s], Port:[%s]", ip, port)
     
-    client = Client(ip=ip, port=port)
+    client = MyClient(ip=ip, port=port)
     client.start()
     try:
         while True:
