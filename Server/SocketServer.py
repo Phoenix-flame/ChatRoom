@@ -2,11 +2,11 @@ from threading import Thread
 import threading
 import socket
 from ClientHandler import ClientHandler, clients, client_threads
-import logging
+import logging as log
 from protoc import Server_pb2
 
 format = "%(asctime)s: %(message)s"
-logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
+log.basicConfig(format=format, level=log.INFO, datefmt="%H:%M:%S")
 
 
 class SocketServer(Thread):
@@ -19,8 +19,8 @@ class SocketServer(Thread):
         try:
             self.soc.bind((ip, int(port)))
         except OSError:
-            logging.error("Something goes wrong.")
-            logging.info("Try another IP or Port number.")
+            log.error("Something goes wrong.")
+            log.info("Try another IP or Port number.")
             exit(0)
         self.soc.listen()
 
@@ -38,7 +38,7 @@ class SocketServer(Thread):
             self.soc.settimeout(1)
             try:
                 connection, addr = self.soc.accept()
-                logging.info("Client %s joined.", str(addr))
+                log.info("Client %s joined.", str(addr))
                 if len(clients) == 1:
                     self.notify()
                 clients.append([addr, connection])
