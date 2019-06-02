@@ -13,9 +13,15 @@ class SocketServer(Thread):
     def __init__(self, ip = "127.0.0.1", port=30008):
         Thread.__init__(self)
         self.soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.soc.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.ip = ip
         self.port = port
-        self.soc.bind((ip, int(port)))
+        try:
+            self.soc.bind((ip, int(port)))
+        except OSError:
+            logging.error("Something goes wrong.")
+            logging.info("Try another IP or Port number.")
+            exit(0)
         self.soc.listen()
 
     def close(self):

@@ -2,14 +2,14 @@ from threading import Thread
 import threading
 import select
 import socket
-import logging
+import logging as log
 import argparse as arg 
 import sys
 from protoc import Server_pb2
 from google.protobuf.message import DecodeError
 
 format = "%(asctime)s: %(message)s"
-logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
+log.basicConfig(format=format, level=log.INFO, datefmt="%H:%M:%S")
 
 
 def argumentPars():
@@ -28,19 +28,20 @@ class Client(Thread):
         self.ip = ip
         self.port = port
         self.soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.soc.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.recv_thread = Recv(self.soc)
+        self.__BUFFER_SIZE = 1024
         try:
             self.soc.connect((ip, int(port)))
             self.recv_thread.start()
         except ConnectionRefusedError:
-            logging.error("Server is not available")
+            log.error("Server is not available")
             exit(0)
 
     def close(self):
         if self.soc:
             self.soc.close()
             self.soc = -1
-        exit(0)
 
     def run(self):
         self.__stop = False
@@ -48,6 +49,7 @@ class Client(Thread):
             while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
                 if self.recv_thread.isStopped():
                     self.stop()
+                    break
                 line = sys.stdin.readline()
                 if line:
                     self.soc.sendall(line[:-1].encode())
@@ -65,6 +67,7 @@ class Recv(Thread):
     def __init__(self, soc):
         Thread.__init__(self)
         self.soc = soc
+        self.__BUFFER_SIZE = 1024
 
     def run(self):
         self.__stop = False
@@ -80,19 +83,19 @@ class Recv(Thread):
                 if len(ready) > 0:
                     incoming_data = b''
                     try:
-                        incoming_data = self.soc.recv(1024) # TODO #3
+                        incoming_data = self.soc.recv(self.__BUFFER_SIZE) # TODO #3
                     except ConnectionResetError:
-                        logging.error("Connection Reset Error")
+                        log.error("Connection Reset Error")
                     # Check if socket has been closed
                     if incoming_data == b'':
-                        logging.info("Server disconnected.")
+                        log.info("Server disconnected.")
                         self.stop()
                     else:
                         ip, port, msg = self.messageCallback(incoming_data)
                         if ip == "Server":
-                            logging.info("From Server: %s", msg)
+                            log.info("From Server: %s", msg)
                         else :
-                            logging.info("From <(%s, %s)> %s!", ip, port, msg)
+                            log.info("From <(%s, %s)> %s!", ip, port, msg)
         self.close()
  
     def messageCallback(self, data):
@@ -117,14 +120,24 @@ class Recv(Thread):
 
 if __name__ == '__main__':
     port, ip = argumentPars()
-    logging.info("Client IP:[%s], Port:[%s]", ip, port)
+    log.info("Client IP:[%s], Port:[%s]", ip, port)
     
     client = Client(ip=ip, port=port)
     client.start()
     try:
         while True:
+            if client.recv_thread.isStopped():
+                print("Server is stopped")
+                print('\nWait...')
+                client.stop()
+                client.recv_thread.join(2)
+                client.join(2)
+                print('End.')   
+                break
             continue
     except KeyboardInterrupt:
         print('\nWait...')
         client.stop()
+        client.recv_thread.join(2)
         client.join(2)
+        print('End.')
