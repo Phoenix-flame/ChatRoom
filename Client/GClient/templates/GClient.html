@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="./css/bootstrap.min.css" >
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 0 20px;
+  
+}
+
+.container {
+  width: 100%;
+}
+
+.darker {
+  border-color: #ccc;
+  background-color: #aaa;
+}
+
+.container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.container img {
+  float: left;
+  max-width: 60px;
+  width: 100%;
+  margin-right: 20px;
+  border-radius: 50%;
+}
+
+.container img.right {
+  float: right;
+  margin-left: 20px;
+  margin-right:0;
+}
+
+.time-right {
+  float: right;
+  color: #000;
+}
+
+.time-left {
+  float: left;
+  color: #000;
+}
+
+.message-right{
+    float:right;
+    color: #000;
+}
+
+.message-left{
+    float:left;
+    color:#000;
+}
+.container{
+
+}
+.row{
+
+}
+
+</style>
+</head>
+<body>
+
+<h2>Chat Messages</h2>
+
+
+<form method="POST">
+    <input name="text">
+    <input type="submit">
+</form>
+<br>
+<br>
+
+<div class="container" >
+  <div class="row" style="width: 100%">
+      <div class="card border-primary mb-3" style="max-width: 18rem; ">
+          <div class="card-header">Header</div>
+          <div class="card-body text-primary">
+            <h5 class="card-title">Primary card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          </div>
+        </div>
+  </div>
+  <div class="row justify-content-end" style="width: 100%">
+      <div class="card border-primary mb-3" style="max-width: 18rem;">
+          <div class="card-header">Header</div>
+          <div class="card-body text-primary">
+            <h5 class="card-title">Primary card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          </div>
+        </div>
+  </div>
+</div>
+  
+
+</body>
+</html>
