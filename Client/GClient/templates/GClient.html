@@ -4,7 +4,8 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="./css/bootstrap.min.css" >
+  <link rel="stylesheet" href="./static/css/bootstrap.min.css" >
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
 body {
@@ -71,33 +72,44 @@ body {
 <h2>Chat Messages</h2>
 
 
+
+
 <form method="POST">
-    <input name="text">
-    <input type="submit">
+  <div class="form-group">
+    <label for="formGroupExampleInput">Message</label>
+    <input type="text" name="text" class="form-control" id="formGroupExampleInput" placeholder="Enter your message">
+  </div>
 </form>
+
 <br>
 <br>
+{% block content %}
+
 
 <div class="container" >
-  <div class="row" style="width: 100%">
+  {% for d in data %}
+  {% if isfromother %}
+  <div class="row justify-content-start" style="width: 100%">
       <div class="card border-primary mb-3" style="max-width: 18rem; ">
-          <div class="card-header">Header</div>
+          <div class="card-header">{{ d["ip"] }}</div>
           <div class="card-body text-primary">
-            <h5 class="card-title">Primary card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <p class="card-text">{{ d["msg"] }}</p>
           </div>
         </div>
   </div>
+  {% else %}
   <div class="row justify-content-end" style="width: 100%">
       <div class="card border-primary mb-3" style="max-width: 18rem;">
-          <div class="card-header">Header</div>
+          <div class="card-header">{{ d["ip"] }}</div>
           <div class="card-body text-primary">
-            <h5 class="card-title">Primary card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <p class="card-text">{{ d["msg"] }}</p>
           </div>
         </div>
   </div>
+  {% endif %}
+  {% endfor %}
 </div>
+{% endblock %}
   
 
 </body>
