@@ -23,7 +23,28 @@
           socket.emit('my_event', {data: 'I\'m connected!'});
       });
       socket.on('my response', function(msg) {
-        $('#log').append('<p>Received: ' + msg.data + '</p>');
+        if(msg.fromOthers === true){
+          $('#log').prepend('<div class="row justify-content-start" style="width: 100%">' +
+         '<div class="card border-primary mb-3" style="max-width: 18rem; ">' + 
+         '<div class="card-header">Header</div>' + 
+         '<div class="card-header">' + msg.ip + '</div>' + 
+         '<div class="card-body text-primary">' + 
+         '<h5 class="card-title">From Other Clients</h5>' + 
+         '<p class="card-text">' + msg.content + '</p>' + 
+         '</div>' + '</div>' + '</div>')
+        }
+        else{
+          $('#log').prepend('<div class="row justify-content-end" style="width: 100%">' +
+         '<div class="card border-primary mb-3" style="max-width: 18rem; ">' + 
+         '<div class="card-header">Header</div>' + 
+         '<div class="card-header">' + msg.ip + '</div>' + 
+         '<div class="card-body text-primary">' + 
+         '<h5 class="card-title">From Server</h5>' + 
+         '<p class="card-text">' + msg.content + '</p>' + 
+         '</div>' + '</div>' + '</div>')
+        }
+        // $('#log').append('<p>Received: ' + msg.data + '</p>');
+        
       });
     });
   </script>
@@ -103,7 +124,11 @@ body {
 
 <br>
 <br>
-<div id="log"></div>
+
+<div class="container" >
+  <div id="log" class="row" style="width: 100%"></div>
+</div>
+
 
 
 
