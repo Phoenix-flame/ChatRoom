@@ -38,7 +38,7 @@ class ClientHandler(Thread):
                         logging.error("Connection Reset Error")
                     # Check if socket has been closed
                     if incoming_data == b'':
-                        logging.info("Client %s left us...", str(self.addr))
+                        logging.warn("Client %s left us...", str(self.addr))
                         # for c in clients:
                         #     print(c[0])
                         for i in range(len(clients)):

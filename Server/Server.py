@@ -27,7 +27,7 @@ def argumentPars():
 
 if __name__ == "__main__":
     port, ip = argumentPars()
-    logging.info("Server IP:[%s], Port:[%s]", ip, port)
+    logging.warn("Server IP:[%s], Port:[%s]", ip, port)
     
     server = SocketServer(ip=ip, port=port)
     server.start()

@@ -20,7 +20,7 @@ class SocketServer(Thread):
             self.soc.bind((ip, int(port)))
         except OSError:
             log.error("Something goes wrong.")
-            log.info("Try another IP or Port number.")
+            log.warn("Try another IP or Port number.")
             exit(0)
         self.soc.listen()
 
@@ -38,7 +38,7 @@ class SocketServer(Thread):
             self.soc.settimeout(1)
             try:
                 connection, addr = self.soc.accept()
-                log.info("Client %s joined.", str(addr))
+                log.warn("Client %s joined.", str(addr))
                 if len(clients) == 1:
                     self.notify()
                 clients.append([addr, connection])
