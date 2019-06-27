@@ -14,7 +14,7 @@
       namespace = '';
       var socket = io(namespace);
       socket.on('connect', function() {
-          socket.emit('my_event', {data: 'I\'m connected!'});
+          // socket.emit('my_event', {data: 'I\'m connected!'});
       });
       socket.on('my response', function(msg) {
         if(msg.fromOthers === true){
