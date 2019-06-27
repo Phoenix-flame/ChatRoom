@@ -20,20 +20,20 @@
         if(msg.fromOthers === true){
           $('#log').prepend('<div class="row justify-content-start" style="width: 100%">' +
          '<div class="card border-primary mb-3" style="max-width: 18rem; ">' + 
-         '<div class="card-header">Header</div>' + 
+        //  '<div class="card-header">Header</div>' + 
          '<div class="card-header">' + msg.ip + '</div>' + 
          '<div class="card-body text-primary">' + 
-         '<h5 class="card-title">From Other Clients</h5>' + 
+        //  '<h5 class="card-title">From Other Clients</h5>' + 
          '<p class="card-text">' + msg.content + '</p>' + 
          '</div>' + '</div>' + '</div>')
         }
         else{
           $('#log').prepend('<div class="row justify-content-end" style="width: 100%">' +
-         '<div class="card border-primary mb-3" style="max-width: 18rem; ">' + 
-         '<div class="card-header">Header</div>' + 
-         '<div class="card-header">' + msg.ip + '</div>' + 
-         '<div class="card-body text-primary">' + 
-         '<h5 class="card-title">From Server</h5>' + 
+         '<div class="card border-success mb-3" style="max-width: 18rem; ">' + 
+        //  '<div class="card-header">Header</div>' + 
+        //  '<div class="card-header">' + msg.ip + '</div>' + 
+         '<div class="card-body text-success">' + 
+        //  '<h5 class="card-title">From Server</h5>' + 
          '<p class="card-text">' + msg.content + '</p>' + 
          '</div>' + '</div>' + '</div>')
         }
@@ -107,7 +107,7 @@ body {
 </head>
 <body>
 
-<h2>Chat Messages</h2>
+<h2>Alireza Messenger</h2>
 
 
 
