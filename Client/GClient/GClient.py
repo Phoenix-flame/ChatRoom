@@ -153,7 +153,7 @@ def test_message(message):
     received_msg.append({'msg': message['data']})
     log.warn('input message' + message['data'])
     socketio.emit('my response', 
-                            {'ip': "You:)", 'content': message['data'], 'fromOthers': False})
+                            {'ip': "You", 'content': message['data'], 'fromOthers': False})
     
 
 @socketio.on('my broadcast event', namespace='')
