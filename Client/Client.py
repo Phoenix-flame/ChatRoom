@@ -8,6 +8,8 @@ import sys
 from protoc import Server_pb2
 from google.protobuf.message import DecodeError
 
+import GClient.Colorer
+
 format = "%(asctime)s: %(message)s"
 log.basicConfig(format=format, level=log.INFO, datefmt="%H:%M:%S")
 

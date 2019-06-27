@@ -4,6 +4,7 @@ import threading
 from collections import deque
 import logging
 from SocketServer import SocketServer
+import Colorer
 
 format = "%(asctime)s: %(message)s"
 logging.basicConfig(format=format, level=logging.INFO, datefmt="%H:%M:%S")
