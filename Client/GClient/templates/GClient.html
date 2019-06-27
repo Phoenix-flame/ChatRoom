@@ -12,18 +12,36 @@
   <script type="text/javascript" charset="utf-8">
     $(document).ready(function(){
       namespace = '';
-      // Connect to the Socket.IO server.
-      // The connection URL has the following format, relative to the current page:
-      //     http[s]://<domain>:<port>[/<namespace>]
       var socket = io(namespace);
-      // Event handler for new connections.
-      // The callback function is invoked when a connection with the
-      // server is established.
       socket.on('connect', function() {
           socket.emit('my_event', {data: 'I\'m connected!'});
       });
       socket.on('my response', function(msg) {
-        $('#log').append('<p>Received: ' + msg.data + '</p>');
+        if(msg.fromOthers === true){
+          $('#log').prepend('<div class="row justify-content-start" style="width: 100%">' +
+         '<div class="card border-primary mb-3" style="max-width: 18rem; ">' + 
+         '<div class="card-header">Header</div>' + 
+         '<div class="card-header">' + msg.ip + '</div>' + 
+         '<div class="card-body text-primary">' + 
+         '<h5 class="card-title">From Other Clients</h5>' + 
+         '<p class="card-text">' + msg.content + '</p>' + 
+         '</div>' + '</div>' + '</div>')
+        }
+        else{
+          $('#log').prepend('<div class="row justify-content-end" style="width: 100%">' +
+         '<div class="card border-primary mb-3" style="max-width: 18rem; ">' + 
+         '<div class="card-header">Header</div>' + 
+         '<div class="card-header">' + msg.ip + '</div>' + 
+         '<div class="card-body text-primary">' + 
+         '<h5 class="card-title">From Server</h5>' + 
+         '<p class="card-text">' + msg.content + '</p>' + 
+         '</div>' + '</div>' + '</div>')
+        }
+      });
+
+      $('form#emit').submit(function(event) {
+                socket.emit('my_event', {data: $('#emitData').val()});
+                return false;
       });
     });
   </script>
@@ -94,16 +112,20 @@ body {
 
 
 
-<form method="POST">
+<form id="emit" method="POST", action="#">
   <div class="form-group">
     <label for="formGroupExampleInput">Message</label>
-    <input type="text" name="text" class="form-control" id="formGroupExampleInput" placeholder="Enter your message">
+    <input type="text" name="text" class="form-control" id="emitData" placeholder="Enter your message">
   </div>
 </form>
 
 <br>
 <br>
-<div id="log"></div>
+
+<div class="container" >
+  <div id="log" class="row" style="width: 100%"></div>
+</div>
+
 
 
 
