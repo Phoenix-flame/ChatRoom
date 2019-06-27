@@ -4,9 +4,13 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="./static/css/bootstrap.min.css" >
-  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
+  <!-- <link rel="stylesheet" href="./static/css/bootstrap.min.css" > -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="refresh" content="10" >
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
 <style>
 body {
   margin: 0 auto;
@@ -87,8 +91,8 @@ body {
 
 
 <div class="container" >
-  {% for d in data %}
-  {% if isfromother %}
+  {% for d in data.result %}
+  {% if d["other"] %}
   <div class="row justify-content-start" style="width: 100%">
       <div class="card border-primary mb-3" style="max-width: 18rem; ">
           <div class="card-header">{{ d["ip"] }}</div>
@@ -110,7 +114,20 @@ body {
   {% endfor %}
 </div>
 {% endblock %}
-  
+<script type=text/javascript>
+  $(function() {
+    $('a#calculate').bind('click', function() {
+      $.getJSON($SCRIPT_ROOT + '/_add_numbers', {
+        a: $('input[name="a"]').val(),
+        b: $('input[name="b"]').val()
+      }, function(data) {
+        $("#result").text(data.result);
+      });
+      return false;
+    });
+  });
+</script>
+
 
 </body>
 </html>

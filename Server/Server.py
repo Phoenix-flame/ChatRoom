@@ -1,4 +1,3 @@
-import numpy as np 
 import argparse as arg 
 import socket
 import threading
@@ -16,8 +15,12 @@ def argumentPars():
     parser.add_argument("-sip", help="IP Address", type=str)
     parser.add_argument("-sp", help="Port Number", type=str)
     args = parser.parse_args()
-    if(args.sip == None):
+    if(args.sip == None and args.sp != None):
         return args.sp, "127.0.0.1"
+    elif(args.sp == None and args.sip != None):
+        return 30008, args.sip
+    elif(args.sp == None and args.sip == None):
+        return 30008, "127.0.0.1"
     return args.sp, args.sip
 
 
