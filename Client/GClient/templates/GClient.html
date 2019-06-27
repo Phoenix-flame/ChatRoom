@@ -7,10 +7,26 @@
   <!-- <link rel="stylesheet" href="./static/css/bootstrap.min.css" > -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="refresh" content="10" >
-
+  <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
+  <script type="text/javascript" charset="utf-8">
+    $(document).ready(function(){
+      namespace = '';
+      // Connect to the Socket.IO server.
+      // The connection URL has the following format, relative to the current page:
+      //     http[s]://<domain>:<port>[/<namespace>]
+      var socket = io(namespace);
+      // Event handler for new connections.
+      // The callback function is invoked when a connection with the
+      // server is established.
+      socket.on('connect', function() {
+          socket.emit('my_event', {data: 'I\'m connected!'});
+      });
+      socket.on('my response', function(msg) {
+        $('#log').append('<p>Received: ' + msg.data + '</p>');
+      });
+    });
+  </script>
 <style>
 body {
   margin: 0 auto;
@@ -87,46 +103,10 @@ body {
 
 <br>
 <br>
-{% block content %}
+<div id="log"></div>
 
 
-<div class="container" >
-  {% for d in data.result %}
-  {% if d["other"] %}
-  <div class="row justify-content-start" style="width: 100%">
-      <div class="card border-primary mb-3" style="max-width: 18rem; ">
-          <div class="card-header">{{ d["ip"] }}</div>
-          <div class="card-body text-primary">
-            <p class="card-text">{{ d["msg"] }}</p>
-          </div>
-        </div>
-  </div>
-  {% else %}
-  <div class="row justify-content-end" style="width: 100%">
-      <div class="card border-primary mb-3" style="max-width: 18rem;">
-          <div class="card-header">{{ d["ip"] }}</div>
-          <div class="card-body text-primary">
-            <p class="card-text">{{ d["msg"] }}</p>
-          </div>
-        </div>
-  </div>
-  {% endif %}
-  {% endfor %}
-</div>
-{% endblock %}
-<script type=text/javascript>
-  $(function() {
-    $('a#calculate').bind('click', function() {
-      $.getJSON($SCRIPT_ROOT + '/_add_numbers', {
-        a: $('input[name="a"]').val(),
-        b: $('input[name="b"]').val()
-      }, function(data) {
-        $("#result").text(data.result);
-      });
-      return false;
-    });
-  });
-</script>
+
 
 
 </body>
